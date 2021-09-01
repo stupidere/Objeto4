@@ -1,0 +1,34 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+struct Object
+{
+	float4 color;
+	float3 position;
+	float3 p2;
+	float v1;
+	float v2;
+	float mass;
+	float deltaT;
+	float deltaS;
+
+
+
+};
+
+
+
+RWStructuredBuffer<Object> objects;
+
+float Resolution;
+
+[numthreads(8, 8, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+	Object object = objects[id.x];
+	object.v2 += 10 * object.deltaT;
+	object.p2.y -= ((object.v1 + object.v2) * object.deltaT) / 2;
+	objects[id.x] = object;
+
+
+}
